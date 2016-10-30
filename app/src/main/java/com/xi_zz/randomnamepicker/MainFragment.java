@@ -1,8 +1,11 @@
 package com.xi_zz.randomnamepicker;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,9 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
+
 		mNames = new ArrayList<>();
 
 		mNames.add(new Person("Anna Xinrui Lu", R.drawable.anna));
@@ -82,7 +88,11 @@ public class MainFragment extends Fragment {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.settings:
-
+				getFragmentManager()
+						.beginTransaction()
+						.addToBackStack(null)
+						.replace(R.id.container, new SettingsFragment())
+						.commit();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -91,12 +101,21 @@ public class MainFragment extends Fragment {
 
 	@OnClick(R2.id.next_name_button)
 	public void displayRandomName() {
-		if (mCopy.isEmpty())
-			mCopy.addAll(mNames);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		boolean callEveryone = preferences.getBoolean(getString(R.string.everyone_gets_called), false);
+		if (!callEveryone) {
+			int randomNum = (int) (Math.random() * mNames.size());
+			setDisplay(mNames.get(randomNum));
+		} else {
+			if (mCopy.isEmpty())
+				mCopy.addAll(mNames);
 
-		int randomNum = (int) (Math.random() * mCopy.size());
-		Person person = mCopy.remove(randomNum);
+			int randomNum = (int) (Math.random() * mCopy.size());
+			setDisplay(mCopy.remove(randomNum));
+		}
+	}
 
+	private void setDisplay(Person person) {
 		mNameView.setText(person.name);
 		if (person.image != 0) {
 			mImageView.setImageResource(person.image);
