@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,13 @@ public class MainFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.add:
+				getFragmentManager()
+						.beginTransaction()
+						.addToBackStack(null)
+						.replace(R.id.container, new PersonFragment())
+						.commit();
+				return true;
 			case R.id.settings:
 				getFragmentManager()
 						.beginTransaction()
@@ -101,6 +109,10 @@ public class MainFragment extends Fragment {
 
 	@OnClick(R2.id.next_name_button)
 	public void displayRandomName() {
+		if (mNames.size() == 0) {
+			Toast.makeText(getContext(), "You don't have anyone on file.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		boolean callEveryone = preferences.getBoolean(getString(R.string.everyone_gets_called), false);
 		if (!callEveryone) {
