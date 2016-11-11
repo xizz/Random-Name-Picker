@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,8 +31,9 @@ public class MainFragment extends Fragment {
 	@BindView(R2.id.image)
 	ImageView mImageView;
 
-	private List<Person> mNames;
+	public static ArrayList<Person> sNames;
 	private List<Person> mCopy;
+	private SharedPreferences mPreferences;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,36 +41,37 @@ public class MainFragment extends Fragment {
 		setHasOptionsMenu(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
 
-		mNames = new ArrayList<>();
+		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		sNames = new ArrayList<>();
 
-		mNames.add(new Person("Anna Xinrui Lu", R.drawable.anna));
-		mNames.add(new Person("Benjamin Antell", R.drawable.ben));
-		mNames.add(new Person("Sylvia Chengcheng Wang", 0));
-		mNames.add(new Person("ConsuelaImani Esseboom", R.drawable.consuela));
-		mNames.add(new Person("Dadriaunna Williams", 0));
-		mNames.add(new Person("Elyse Warren", 0));
-		mNames.add(new Person("Emma Lunder", 0));
-		mNames.add(new Person("Ginger Jiajing Chen", 0));
-		mNames.add(new Person("Jianing Ge", 0));
-		mNames.add(new Person("Jingshan Wang", R.drawable.jingshan));
-		mNames.add(new Person("Cathy Jingyuan Liao", R.drawable.cathy));
-		mNames.add(new Person("John Park", R.drawable.john));
-		mNames.add(new Person("Jamie Julliene Gatchalian", 0));
-		mNames.add(new Person("Katie Behrmann", R.drawable.katie));
-		mNames.add(new Person("Lindsay Baer", 0));
-		mNames.add(new Person("Maureen Mengqi Ding", R.drawable.maureen));
-		mNames.add(new Person("Michael Tarnow", 0));
-		mNames.add(new Person("Ningel Bhuta", R.drawable.ningel));
-		mNames.add(new Person("Rachel Miller", R.drawable.rachel));
-		mNames.add(new Person("Rocio Elena Conde-Fuentes", R.drawable.rocio));
-		mNames.add(new Person("Steve Zhao", R.drawable.steve));
-		mNames.add(new Person("Iris Wang Xi", R.drawable.iris));
-		mNames.add(new Person("Wanshu Wang", 0));
-		mNames.add(new Person("Elsa YungYung Lee", R.drawable.elsa));
-		mNames.add(new Person("Vivienne Yuzhou Wang", R.drawable.vivienne));
-		mNames.add(new Person("Sean Zhenzhen Ma", R.drawable.sean));
+//		sNames.add(new Person("Anna Xinrui Lu", R.drawable.anna));
+//		sNames.add(new Person("Benjamin Antell", R.drawable.ben));
+//		sNames.add(new Person("Sylvia Chengcheng Wang", 0));
+//		sNames.add(new Person("ConsuelaImani Esseboom", R.drawable.consuela));
+//		sNames.add(new Person("Dadriaunna Williams", 0));
+//		sNames.add(new Person("Elyse Warren", 0));
+//		sNames.add(new Person("Emma Lunder", 0));
+//		sNames.add(new Person("Ginger Jiajing Chen", 0));
+//		sNames.add(new Person("Jianing Ge", 0));
+//		sNames.add(new Person("Jingshan Wang", R.drawable.jingshan));
+//		sNames.add(new Person("Cathy Jingyuan Liao", R.drawable.cathy));
+//		sNames.add(new Person("John Park", R.drawable.john));
+//		sNames.add(new Person("Jamie Julliene Gatchalian", 0));
+//		sNames.add(new Person("Katie Behrmann", R.drawable.katie));
+//		sNames.add(new Person("Lindsay Baer", 0));
+//		sNames.add(new Person("Maureen Mengqi Ding", R.drawable.maureen));
+//		sNames.add(new Person("Michael Tarnow", 0));
+//		sNames.add(new Person("Ningel Bhuta", R.drawable.ningel));
+//		sNames.add(new Person("Rachel Miller", R.drawable.rachel));
+//		sNames.add(new Person("Rocio Elena Conde-Fuentes", R.drawable.rocio));
+//		sNames.add(new Person("Steve Zhao", R.drawable.steve));
+//		sNames.add(new Person("Iris Wang Xi", R.drawable.iris));
+//		sNames.add(new Person("Wanshu Wang", 0));
+//		sNames.add(new Person("Elsa YungYung Lee", R.drawable.elsa));
+//		sNames.add(new Person("Vivienne Yuzhou Wang", R.drawable.vivienne));
+//		sNames.add(new Person("Sean Zhenzhen Ma", R.drawable.sean));
 
-		mCopy = new ArrayList<>(mNames);
+		mCopy = new ArrayList<>(sNames);
 	}
 
 	@Override
@@ -77,6 +80,16 @@ public class MainFragment extends Fragment {
 		View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_main, container, false);
 		ButterKnife.bind(this, view);
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		String peopleString = mPreferences.getString(Util.KEY_PEOPLE, null);
+		if (TextUtils.isEmpty(peopleString))
+			return;
+		People people = Util.GSON.fromJson(peopleString, People.class);
+		sNames = people.peopleList;
 	}
 
 	@Override
@@ -109,18 +122,18 @@ public class MainFragment extends Fragment {
 
 	@OnClick(R2.id.next_name_button)
 	public void displayRandomName() {
-		if (mNames.size() == 0) {
+		if (sNames.size() == 0) {
 			Toast.makeText(getContext(), "You don't have anyone on file.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		boolean callEveryone = preferences.getBoolean(getString(R.string.everyone_gets_called), false);
+
+		boolean callEveryone = mPreferences.getBoolean(getString(R.string.everyone_gets_called), false);
 		if (!callEveryone) {
-			int randomNum = (int) (Math.random() * mNames.size());
-			setDisplay(mNames.get(randomNum));
+			int randomNum = (int) (Math.random() * sNames.size());
+			setDisplay(sNames.get(randomNum));
 		} else {
 			if (mCopy.isEmpty())
-				mCopy.addAll(mNames);
+				mCopy.addAll(sNames);
 
 			int randomNum = (int) (Math.random() * mCopy.size());
 			setDisplay(mCopy.remove(randomNum));
@@ -131,6 +144,8 @@ public class MainFragment extends Fragment {
 		mNameView.setText(person.name);
 		if (person.image != 0) {
 			mImageView.setImageResource(person.image);
+		} else if (person.photo != null) {
+			mImageView.setImageBitmap(Util.byteStringToBitmap(person.photo));
 		} else {
 			mImageView.setImageResource(R.mipmap.ic_launcher);
 		}
