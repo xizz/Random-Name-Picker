@@ -85,6 +85,7 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
 		String peopleString = mPreferences.getString(Util.KEY_PEOPLE, null);
 		if (TextUtils.isEmpty(peopleString))
 			return;
@@ -147,7 +148,7 @@ public class MainFragment extends Fragment {
 		} else if (person.photo != null) {
 			mImageView.setImageBitmap(Util.byteStringToBitmap(person.photo));
 		} else {
-			mImageView.setImageResource(R.mipmap.ic_launcher);
+			mImageView.setImageResource(R.drawable.ic_profile);
 		}
 	}
 }
