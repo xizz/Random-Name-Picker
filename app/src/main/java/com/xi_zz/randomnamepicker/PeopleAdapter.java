@@ -13,7 +13,6 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
 	public PeopleAdapter(AppCompatActivity activity) {
 		mActivity = activity;
-
 	}
 
 	@Override

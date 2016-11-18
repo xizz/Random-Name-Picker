@@ -31,7 +31,6 @@ public class PeopleViewHolder extends RecyclerView.ViewHolder {
 		super(itemView);
 		ButterKnife.bind(this, itemView);
 		mActivity = activity;
-
 	}
 
 	public void bind(Person person) {
