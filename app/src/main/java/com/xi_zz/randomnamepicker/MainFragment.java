@@ -116,6 +116,13 @@ public class MainFragment extends Fragment {
 						.replace(R.id.container, new SettingsFragment())
 						.commit();
 				return true;
+			case R.id.list:
+				getFragmentManager()
+						.beginTransaction()
+						.addToBackStack(null)
+						.replace(R.id.container, new PeopleListFragment())
+						.commit();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
