@@ -1,5 +1,6 @@
 package com.xi_zz.randomnamepicker;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -37,6 +38,8 @@ public class PersonFragment extends Fragment {
 	ImageView mPhotoImage;
 
 	private Bitmap mBitmap;
+
+	final int PIC_CROP = 1;
 
 	@Override
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -113,6 +116,46 @@ public class PersonFragment extends Fragment {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
+
+
+		}
+//		if (requestCode == PIC_CROP) {
+//			if (data != null) {
+//				// get the returned data
+//				Bundle extras = data.getExtras();
+//				// get the cropped bitmap
+//				Bitmap selectedBitmap = extras.getParcelable("data");
+//
+//				mPhotoImage.setImageBitmap(selectedBitmap);
+//			}
+//		}
+
+	}
+
+	private void performCrop(Uri picUri) {
+		try {
+			Intent cropIntent = new Intent("com.android.camera.action.CROP");
+			// indicate image type and Uri
+			cropIntent.setDataAndType(picUri, "image/*");
+			// set crop properties here
+			cropIntent.putExtra("crop", true);
+			// indicate aspect of desired crop
+			cropIntent.putExtra("aspectX", 1);
+			cropIntent.putExtra("aspectY", 1);
+			// indicate output X and Y
+			cropIntent.putExtra("outputX", 128);
+			cropIntent.putExtra("outputY", 128);
+			// retrieve data on return
+			cropIntent.putExtra("return-data", true);
+			// start the activity - we handle returning in onActivityResult
+			startActivityForResult(cropIntent, PIC_CROP);
+		}
+		// respond to users whose devices do not support the crop action
+		catch (ActivityNotFoundException anfe) {
+			// display an error message
+			String errorMessage = "Whoops - your device doesn't support the crop action!";
+			Toast toast = Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT);
+			toast.show();
 		}
 	}
 
@@ -122,6 +165,7 @@ public class PersonFragment extends Fragment {
 		double targetH = 600;
 
 		// Get the dimensions of the bitmap
+		performCrop(uri);
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 
 		bmOptions.inJustDecodeBounds = true;
