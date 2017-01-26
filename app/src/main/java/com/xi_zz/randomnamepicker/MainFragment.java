@@ -24,6 +24,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.xi_zz.randomnamepicker.Util.sPeople;
+
 public class MainFragment extends Fragment {
 
 	@BindView(R2.id.name_text)
@@ -31,7 +33,6 @@ public class MainFragment extends Fragment {
 	@BindView(R2.id.image)
 	ImageView mImageView;
 
-	public static ArrayList<Person> sNames;
 	private List<Person> mCopy;
 	private SharedPreferences mPreferences;
 
@@ -42,36 +43,35 @@ public class MainFragment extends Fragment {
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
 
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		sNames = new ArrayList<>();
 
-//		sNames.add(new Person("Anna Xinrui Lu", R.drawable.anna));
-//		sNames.add(new Person("Benjamin Antell", R.drawable.ben));
-//		sNames.add(new Person("Sylvia Chengcheng Wang", 0));
-//		sNames.add(new Person("ConsuelaImani Esseboom", R.drawable.consuela));
-//		sNames.add(new Person("Dadriaunna Williams", 0));
-//		sNames.add(new Person("Elyse Warren", 0));
-//		sNames.add(new Person("Emma Lunder", 0));
-//		sNames.add(new Person("Ginger Jiajing Chen", 0));
-//		sNames.add(new Person("Jianing Ge", 0));
-//		sNames.add(new Person("Jingshan Wang", R.drawable.jingshan));
-//		sNames.add(new Person("Cathy Jingyuan Liao", R.drawable.cathy));
-//		sNames.add(new Person("John Park", R.drawable.john));
-//		sNames.add(new Person("Jamie Julliene Gatchalian", 0));
-//		sNames.add(new Person("Katie Behrmann", R.drawable.katie));
-//		sNames.add(new Person("Lindsay Baer", 0));
-//		sNames.add(new Person("Maureen Mengqi Ding", R.drawable.maureen));
-//		sNames.add(new Person("Michael Tarnow", 0));
-//		sNames.add(new Person("Ningel Bhuta", R.drawable.ningel));
-//		sNames.add(new Person("Rachel Miller", R.drawable.rachel));
-//		sNames.add(new Person("Rocio Elena Conde-Fuentes", R.drawable.rocio));
-//		sNames.add(new Person("Steve Zhao", R.drawable.steve));
-//		sNames.add(new Person("Iris Wang Xi", R.drawable.iris));
-//		sNames.add(new Person("Wanshu Wang", 0));
-//		sNames.add(new Person("Elsa YungYung Lee", R.drawable.elsa));
-//		sNames.add(new Person("Vivienne Yuzhou Wang", R.drawable.vivienne));
-//		sNames.add(new Person("Sean Zhenzhen Ma", R.drawable.sean));
+//		sPeople.add(new Person("Anna Xinrui Lu", R.drawable.anna));
+//		sPeople.add(new Person("Benjamin Antell", R.drawable.ben));
+//		sPeople.add(new Person("Sylvia Chengcheng Wang", 0));
+//		sPeople.add(new Person("ConsuelaImani Esseboom", R.drawable.consuela));
+//		sPeople.add(new Person("Dadriaunna Williams", 0));
+//		sPeople.add(new Person("Elyse Warren", 0));
+//		sPeople.add(new Person("Emma Lunder", 0));
+//		sPeople.add(new Person("Ginger Jiajing Chen", 0));
+//		sPeople.add(new Person("Jianing Ge", 0));
+//		sPeople.add(new Person("Jingshan Wang", R.drawable.jingshan));
+//		sPeople.add(new Person("Cathy Jingyuan Liao", R.drawable.cathy));
+//		sPeople.add(new Person("John Park", R.drawable.john));
+//		sPeople.add(new Person("Jamie Julliene Gatchalian", 0));
+//		sPeople.add(new Person("Katie Behrmann", R.drawable.katie));
+//		sPeople.add(new Person("Lindsay Baer", 0));
+//		sPeople.add(new Person("Maureen Mengqi Ding", R.drawable.maureen));
+//		sPeople.add(new Person("Michael Tarnow", 0));
+//		sPeople.add(new Person("Ningel Bhuta", R.drawable.ningel));
+//		sPeople.add(new Person("Rachel Miller", R.drawable.rachel));
+//		sPeople.add(new Person("Rocio Elena Conde-Fuentes", R.drawable.rocio));
+//		sPeople.add(new Person("Steve Zhao", R.drawable.steve));
+//		sPeople.add(new Person("Iris Wang Xi", R.drawable.iris));
+//		sPeople.add(new Person("Wanshu Wang", 0));
+//		sPeople.add(new Person("Elsa YungYung Lee", R.drawable.elsa));
+//		sPeople.add(new Person("Vivienne Yuzhou Wang", R.drawable.vivienne));
+//		sPeople.add(new Person("Sean Zhenzhen Ma", R.drawable.sean));
 
-		mCopy = new ArrayList<>(sNames);
+		mCopy = new ArrayList<>(sPeople.peopleList);
 	}
 
 	@Override
@@ -86,11 +86,11 @@ public class MainFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
-		String peopleString = mPreferences.getString(Util.KEY_PEOPLE, null);
+		String peopleString = mPreferences.getString(Util.KEY_PEOPLE_STR, null);
 		if (TextUtils.isEmpty(peopleString))
 			return;
-		People people = Util.GSON.fromJson(peopleString, People.class);
-		sNames = people.peopleList;
+		sPeople = Util.GSON.fromJson(peopleString, People.class);
+
 	}
 
 	@Override
@@ -130,18 +130,18 @@ public class MainFragment extends Fragment {
 
 	@OnClick(R2.id.next_name_button)
 	public void displayRandomName() {
-		if (sNames.size() == 0) {
+		if (sPeople.size() == 0) {
 			Toast.makeText(getContext(), "You don't have anyone on file.", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		boolean callEveryone = mPreferences.getBoolean(getString(R.string.everyone_gets_called), false);
 		if (!callEveryone) {
-			int randomNum = (int) (Math.random() * sNames.size());
-			setDisplay(sNames.get(randomNum));
+			int randomNum = (int) (Math.random() * sPeople.size());
+			setDisplay(sPeople.get(randomNum));
 		} else {
 			if (mCopy.isEmpty())
-				mCopy.addAll(sNames);
+				mCopy.addAll(sPeople.peopleList);
 
 			int randomNum = (int) (Math.random() * mCopy.size());
 			setDisplay(mCopy.remove(randomNum));

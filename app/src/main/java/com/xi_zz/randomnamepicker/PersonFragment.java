@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.xi_zz.randomnamepicker.Util.sPeople;
 
 public class PersonFragment extends Fragment {
 	private static final int REQUEST_PICK_PHOTO = 1;
@@ -39,6 +40,7 @@ public class PersonFragment extends Fragment {
 	ImageView mPhotoImage;
 
 	private Bitmap mBitmap;
+	private Person mPerson;
 
 
 	@Override
@@ -47,6 +49,8 @@ public class PersonFragment extends Fragment {
 		setHasOptionsMenu(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Add a Person");
+		if (getArguments() != null)
+			mPerson = (Person) getArguments().getSerializable(Util.KEY_PERSON);
 	}
 
 	@Override
@@ -54,6 +58,15 @@ public class PersonFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_person, container, false);
 		ButterKnife.bind(this, view);
 		return view;
+	}
+
+	@Override
+	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+		if (mPerson != null) {
+			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
+			mNameText.setText(mPerson.name);
+			mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mPerson.photo));
+		}
 	}
 
 	@Override
@@ -72,7 +85,10 @@ public class PersonFragment extends Fragment {
 				if (TextUtils.isEmpty(mNameText.getText())) {
 					Toast.makeText(getContext(), "You must enter a name.", Toast.LENGTH_SHORT).show();
 				} else {
-					addPerson();
+					if (mPerson != null)
+						editPerson();
+					else
+						addPerson();
 					getActivity().onBackPressed();
 				}
 				return true;
@@ -81,17 +97,25 @@ public class PersonFragment extends Fragment {
 		}
 	}
 
+	private void editPerson() {
+		Person temp = sPeople.get(mPerson);
+		temp.name = mNameText.getText().toString();
+		temp.photo = mBitmap == null ? temp.photo : Util.bitmapToByteString(mBitmap);
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String peopleString = Util.GSON.toJson(sPeople);
+		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
+	}
+
 	private void addPerson() {
 		String name = mNameText.getText().toString();
 
 		String imageStr = mBitmap == null ? null : Util.bitmapToByteString(mBitmap);
 		Person person = new Person(name, imageStr);
-		MainFragment.sNames.add(person);
+		sPeople.add(person);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		People people = new People();
-		people.peopleList = MainFragment.sNames;
-		String peopleString = Util.GSON.toJson(people);
-		preferences.edit().putString(Util.KEY_PEOPLE, peopleString).apply();
+		String peopleString = Util.GSON.toJson(sPeople);
+		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 
 	}
 
@@ -116,8 +140,8 @@ public class PersonFragment extends Fragment {
 			try {
 				Bundle extras = data.getExtras();
 				// get the cropped bitmap
-				Bitmap selectedBitmap = extras.getParcelable("data");
-				mPhotoImage.setImageBitmap(selectedBitmap);
+				mBitmap = extras.getParcelable("data");
+				mPhotoImage.setImageBitmap(mBitmap);
 //				decodeUri(data.getData());
 			} catch (Exception e) {
 				e.printStackTrace();

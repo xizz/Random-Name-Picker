@@ -2,6 +2,7 @@ package com.xi_zz.randomnamepicker;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ public class PeopleViewHolder extends RecyclerView.ViewHolder {
 	TextView mTextView;
 
 	private AppCompatActivity mActivity;
+	private Person mPerson;
 
 	public PeopleViewHolder(View itemView, AppCompatActivity activity) {
 		super(itemView);
@@ -34,6 +36,7 @@ public class PeopleViewHolder extends RecyclerView.ViewHolder {
 	}
 
 	public void bind(Person person) {
+		mPerson = person;
 		mTextView.setText(person.name);
 		if (!TextUtils.isEmpty(person.photo))
 			mImageView.setImageBitmap(byteStringToBitmap(person.photo));
@@ -41,10 +44,15 @@ public class PeopleViewHolder extends RecyclerView.ViewHolder {
 
 	@OnClick(R.id.card_view)
 	public void itemClicked() {
+		// Pass person object to PersonFragment
+		PersonFragment fragment = new PersonFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(Util.KEY_PERSON, mPerson);
+		fragment.setArguments(args);
 		mActivity.getSupportFragmentManager()
 				.beginTransaction()
 				.addToBackStack(null)
-				.replace(R.id.container, new PersonFragment())
+				.replace(R.id.container, fragment)
 				.commit();
 	}
 

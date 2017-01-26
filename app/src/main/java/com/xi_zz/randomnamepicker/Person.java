@@ -1,6 +1,8 @@
 package com.xi_zz.randomnamepicker;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable {
 	public String name;
 	public int image;
 	public String photo;

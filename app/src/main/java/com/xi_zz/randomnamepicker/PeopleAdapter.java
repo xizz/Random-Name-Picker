@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static com.xi_zz.randomnamepicker.Util.sPeople;
+
 
 public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
@@ -23,13 +25,13 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
 	@Override
 	public void onBindViewHolder(PeopleViewHolder holder, int position) {
-		Person person = MainFragment.sNames.get(position);
+		Person person = sPeople.get(position);
 		holder.bind(person);
 	}
 
 	@Override
 	public int getItemCount() {
-		return MainFragment.sNames.size();
+		return sPeople.size();
 	}
 }
 
