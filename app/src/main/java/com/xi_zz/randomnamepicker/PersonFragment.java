@@ -32,6 +32,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class PersonFragment extends Fragment {
 	private static final int REQUEST_PICK_PHOTO = 1;
+	private static final int REQUEST_CROP_PHOTO = 2;
 	@BindView(R2.id.name_text)
 	EditText mNameText;
 	@BindView(R2.id.photo_image)
@@ -39,7 +40,6 @@ public class PersonFragment extends Fragment {
 
 	private Bitmap mBitmap;
 
-	final int PIC_CROP = 1;
 
 	@Override
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -111,25 +111,18 @@ public class PersonFragment extends Fragment {
 
 		Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
 		if (requestCode == REQUEST_PICK_PHOTO) {
+			performCrop(data.getData());
+		} else if (requestCode == REQUEST_CROP_PHOTO) {
 			try {
-				decodeUri(data.getData());
-			} catch (FileNotFoundException e) {
+				Bundle extras = data.getExtras();
+				// get the cropped bitmap
+				Bitmap selectedBitmap = extras.getParcelable("data");
+				mPhotoImage.setImageBitmap(selectedBitmap);
+//				decodeUri(data.getData());
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-
 		}
-//		if (requestCode == PIC_CROP) {
-//			if (data != null) {
-//				// get the returned data
-//				Bundle extras = data.getExtras();
-//				// get the cropped bitmap
-//				Bitmap selectedBitmap = extras.getParcelable("data");
-//
-//				mPhotoImage.setImageBitmap(selectedBitmap);
-//			}
-//		}
-
 	}
 
 	private void performCrop(Uri picUri) {
@@ -143,19 +136,19 @@ public class PersonFragment extends Fragment {
 			cropIntent.putExtra("aspectX", 1);
 			cropIntent.putExtra("aspectY", 1);
 			// indicate output X and Y
-			cropIntent.putExtra("outputX", 128);
-			cropIntent.putExtra("outputY", 128);
+			cropIntent.putExtra("outputX", 1024);
+			cropIntent.putExtra("outputY", 1024);
 			// retrieve data on return
+			cropIntent.putExtra("scale", true);
 			cropIntent.putExtra("return-data", true);
 			// start the activity - we handle returning in onActivityResult
-			startActivityForResult(cropIntent, PIC_CROP);
+			startActivityForResult(cropIntent, REQUEST_CROP_PHOTO);
 		}
 		// respond to users whose devices do not support the crop action
 		catch (ActivityNotFoundException anfe) {
 			// display an error message
 			String errorMessage = "Whoops - your device doesn't support the crop action!";
-			Toast toast = Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT);
-			toast.show();
+			Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -165,7 +158,6 @@ public class PersonFragment extends Fragment {
 		double targetH = 600;
 
 		// Get the dimensions of the bitmap
-		performCrop(uri);
 		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
 
 		bmOptions.inJustDecodeBounds = true;
