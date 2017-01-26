@@ -43,7 +43,12 @@ public class PeopleListFragment extends Fragment {
 		mRecyclerView.setAdapter(mPeopleAdapter);
 		mRecyclerView.setHasFixedSize(true);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("All People");
 	}
 
 	@Override
@@ -56,5 +61,4 @@ public class PeopleListFragment extends Fragment {
 				return super.onOptionsItemSelected(item);
 		}
 	}
-
 }
