@@ -70,6 +70,12 @@ public class PersonFragment extends Fragment {
 	}
 
 	@Override
+	public void onPrepareOptionsMenu(final Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		menu.findItem(R.id.delete).setVisible(mPerson != null);
+	}
+
+	@Override
 	public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_person, menu);
 		super.onCreateOptionsMenu(menu, inflater);
@@ -92,9 +98,22 @@ public class PersonFragment extends Fragment {
 					getActivity().onBackPressed();
 				}
 				return true;
+			case R.id.delete:
+				deletePerson();
+				getActivity().onBackPressed();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void deletePerson() {
+		sPeople.peopleList.remove(mPerson);
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String peopleString = Util.GSON.toJson(sPeople);
+		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
+
 	}
 
 	private void editPerson() {
