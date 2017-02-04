@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +32,10 @@ public class MainFragment extends Fragment {
 	@BindView(R2.id.image)
 	ImageView mImageView;
 
-	private List<Person> mCopy;
+	private ArrayList<Person> mCopy;
 	private SharedPreferences mPreferences;
+	private Person mCurrentPerson;
+	private int mSize;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,35 +44,18 @@ public class MainFragment extends Fragment {
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
 
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+		if (savedInstanceState != null) {
+			mCurrentPerson = (Person) savedInstanceState.getSerializable(Util.KEY_PERSON);
+			mCopy = (ArrayList<Person>) savedInstanceState.getSerializable(Util.KEY_PERSONS);
+		} else
+			mCopy = new ArrayList<>(sPeople.peopleList);
+	}
 
-//		sPeople.add(new Person("Anna Xinrui Lu", R.drawable.anna));
-//		sPeople.add(new Person("Benjamin Antell", R.drawable.ben));
-//		sPeople.add(new Person("Sylvia Chengcheng Wang", 0));
-//		sPeople.add(new Person("ConsuelaImani Esseboom", R.drawable.consuela));
-//		sPeople.add(new Person("Dadriaunna Williams", 0));
-//		sPeople.add(new Person("Elyse Warren", 0));
-//		sPeople.add(new Person("Emma Lunder", 0));
-//		sPeople.add(new Person("Ginger Jiajing Chen", 0));
-//		sPeople.add(new Person("Jianing Ge", 0));
-//		sPeople.add(new Person("Jingshan Wang", R.drawable.jingshan));
-//		sPeople.add(new Person("Cathy Jingyuan Liao", R.drawable.cathy));
-//		sPeople.add(new Person("John Park", R.drawable.john));
-//		sPeople.add(new Person("Jamie Julliene Gatchalian", 0));
-//		sPeople.add(new Person("Katie Behrmann", R.drawable.katie));
-//		sPeople.add(new Person("Lindsay Baer", 0));
-//		sPeople.add(new Person("Maureen Mengqi Ding", R.drawable.maureen));
-//		sPeople.add(new Person("Michael Tarnow", 0));
-//		sPeople.add(new Person("Ningel Bhuta", R.drawable.ningel));
-//		sPeople.add(new Person("Rachel Miller", R.drawable.rachel));
-//		sPeople.add(new Person("Rocio Elena Conde-Fuentes", R.drawable.rocio));
-//		sPeople.add(new Person("Steve Zhao", R.drawable.steve));
-//		sPeople.add(new Person("Iris Wang Xi", R.drawable.iris));
-//		sPeople.add(new Person("Wanshu Wang", 0));
-//		sPeople.add(new Person("Elsa YungYung Lee", R.drawable.elsa));
-//		sPeople.add(new Person("Vivienne Yuzhou Wang", R.drawable.vivienne));
-//		sPeople.add(new Person("Sean Zhenzhen Ma", R.drawable.sean));
-
-		mCopy = new ArrayList<>(sPeople.peopleList);
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Util.KEY_PERSON, mCurrentPerson);
+		outState.putSerializable(Util.KEY_PERSONS, mCopy);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -90,7 +74,12 @@ public class MainFragment extends Fragment {
 		if (TextUtils.isEmpty(peopleString))
 			return;
 		sPeople = Util.GSON.fromJson(peopleString, People.class);
-
+		if (mSize != sPeople.size()) {
+			mCopy = new ArrayList<>(sPeople.peopleList);
+			mSize = sPeople.size();
+		}
+		if (mCurrentPerson != null && mCurrentPerson.photo != null)
+			mImageView.setImageBitmap(Util.byteStringToBitmap(mCurrentPerson.photo));
 	}
 
 	@Override
@@ -138,14 +127,14 @@ public class MainFragment extends Fragment {
 		boolean callEveryone = mPreferences.getBoolean(getString(R.string.everyone_gets_called), false);
 		if (!callEveryone) {
 			int randomNum = (int) (Math.random() * sPeople.size());
-			setDisplay(sPeople.get(randomNum));
+			mCurrentPerson = sPeople.get(randomNum);
 		} else {
 			if (mCopy.isEmpty())
 				mCopy.addAll(sPeople.peopleList);
-
 			int randomNum = (int) (Math.random() * mCopy.size());
-			setDisplay(mCopy.remove(randomNum));
+			mCurrentPerson = mCopy.remove(randomNum);
 		}
+		setDisplay(mCurrentPerson);
 	}
 
 	private void setDisplay(Person person) {
