@@ -2,4 +2,11 @@
 	<string name="app_name">Random Name Picker</string>
 	<string name="settings">Settings</string>
 	<string name="everyone_gets_called">everyone_gets_called</string>
+	<string name="name">Name</string>
+	<string name="next_name">Next</string>
+	<string name="photo_pick">Pick a Photo</string>
+	<string name="add_person">Add Person</string>
+	<string name="see_all">See All</string>
+	<string name="save">Save</string>
+	<string name="delete">Delete</string>
 </resources>
