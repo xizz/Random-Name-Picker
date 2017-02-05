@@ -2,18 +2,15 @@ package com.xi_zz.randomnamepicker;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +31,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 import static com.xi_zz.randomnamepicker.Util.sPeople;
 
 public class PersonFragment extends Fragment {
@@ -113,14 +109,6 @@ public class PersonFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
-		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-			Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
-			//resume tasks needing this permission
-		}
-	}
-
 	private void deletePerson() {
 		sPeople.peopleList.remove(mPerson);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -164,7 +152,6 @@ public class PersonFragment extends Fragment {
 			return;
 
 		if (requestCode == REQUEST_PICK_PHOTO) {
-
 			Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
 			requestCrop(data.getData());
 		} else if (requestCode == UCrop.REQUEST_CROP) {

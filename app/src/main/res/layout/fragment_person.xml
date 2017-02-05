@@ -11,6 +11,7 @@
 		android:id="@+id/name_text"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:gravity="center"
 		android:singleLine="true"
 		android:hint="@string/name"
 		/>
@@ -25,6 +26,7 @@
 
 	<Button
 		android:id="@+id/pick_image_button"
+		android:layout_margin="5dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
