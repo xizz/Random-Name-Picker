@@ -1,17 +1,19 @@
 package com.xi_zz.randomnamepicker;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +24,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.yalantis.ucrop.UCrop;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import butterknife.BindView;
@@ -29,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static com.xi_zz.randomnamepicker.Util.sPeople;
 
 public class PersonFragment extends Fragment {
@@ -107,9 +113,16 @@ public class PersonFragment extends Fragment {
 		}
 	}
 
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+		if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+			Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+			//resume tasks needing this permission
+		}
+	}
+
 	private void deletePerson() {
 		sPeople.peopleList.remove(mPerson);
-
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		String peopleString = Util.GSON.toJson(sPeople);
 		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
@@ -128,14 +141,12 @@ public class PersonFragment extends Fragment {
 
 	private void addPerson() {
 		String name = mNameText.getText().toString();
-
 		String imageStr = mBitmap == null ? null : Util.bitmapToByteString(mBitmap);
 		Person person = new Person(name, imageStr);
 		sPeople.add(person);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		String peopleString = Util.GSON.toJson(sPeople);
 		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
-
 	}
 
 
@@ -152,47 +163,23 @@ public class PersonFragment extends Fragment {
 		if (resultCode != RESULT_OK)
 			return;
 
-		Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
 		if (requestCode == REQUEST_PICK_PHOTO) {
-			performCrop(data.getData());
-		} else if (requestCode == REQUEST_CROP_PHOTO) {
+
+			Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
+			requestCrop(data.getData());
+		} else if (requestCode == UCrop.REQUEST_CROP) {
 			try {
-				Bundle extras = data.getExtras();
-				// get the cropped bitmap
-				mBitmap = extras.getParcelable("data");
-				mPhotoImage.setImageBitmap(mBitmap);
-//				decodeUri(data.getData());
+				decodeUri(UCrop.getOutput(data));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private void performCrop(Uri picUri) {
-		try {
-			Intent cropIntent = new Intent("com.android.camera.action.CROP");
-			// indicate image type and Uri
-			cropIntent.setDataAndType(picUri, "image/*");
-			// set crop properties here
-			cropIntent.putExtra("crop", true);
-			// indicate aspect of desired crop
-			cropIntent.putExtra("aspectX", 1);
-			cropIntent.putExtra("aspectY", 1);
-			// indicate output X and Y
-			cropIntent.putExtra("outputX", 1024);
-			cropIntent.putExtra("outputY", 1024);
-			// retrieve data on return
-			cropIntent.putExtra("scale", true);
-			cropIntent.putExtra("return-data", true);
-			// start the activity - we handle returning in onActivityResult
-			startActivityForResult(cropIntent, REQUEST_CROP_PHOTO);
-		}
-		// respond to users whose devices do not support the crop action
-		catch (ActivityNotFoundException anfe) {
-			// display an error message
-			String errorMessage = "Whoops - your device doesn't support the crop action!";
-			Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-		}
+	private void requestCrop(Uri picUri) {
+		String filename = "temp.png";
+		UCrop uCrop = UCrop.of(picUri, Uri.fromFile(new File(getContext().getCacheDir(), filename)));
+		uCrop.start(getActivity(), this);
 	}
 
 	private void decodeUri(Uri uri) throws FileNotFoundException {
