@@ -11,9 +11,10 @@
 		android:id="@+id/name_text"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:freezesText="true"
 		android:gravity="center"
-		android:singleLine="true"
 		android:hint="@string/name"
+		android:singleLine="true"
 		/>
 
 	<ImageView
@@ -26,10 +27,10 @@
 
 	<Button
 		android:id="@+id/pick_image_button"
-		android:layout_margin="5dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
+		android:layout_margin="5dp"
 		android:text="@string/photo_pick"
 		/>
 </LinearLayout>

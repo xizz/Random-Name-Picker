@@ -31,11 +31,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.xi_zz.randomnamepicker.Util.KEY_PHOTO;
 import static com.xi_zz.randomnamepicker.Util.sPeople;
 
 public class PersonFragment extends Fragment {
 	private static final int REQUEST_PICK_PHOTO = 1;
-	private static final int REQUEST_CROP_PHOTO = 2;
 	@BindView(R2.id.name_text)
 	EditText mNameText;
 	@BindView(R2.id.photo_image)
@@ -43,6 +43,7 @@ public class PersonFragment extends Fragment {
 
 	private Bitmap mBitmap;
 	private Person mPerson;
+	private String mOutStateBitmap;
 
 
 	@Override
@@ -53,6 +54,8 @@ public class PersonFragment extends Fragment {
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Add a Person");
 		if (getArguments() != null)
 			mPerson = (Person) getArguments().getSerializable(Util.KEY_PERSON);
+		if (savedInstanceState != null)
+			mOutStateBitmap = (String) savedInstanceState.getSerializable(KEY_PHOTO);
 	}
 
 	@Override
@@ -64,6 +67,9 @@ public class PersonFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
+		if (mOutStateBitmap != null)
+			mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mOutStateBitmap));
+
 		if (mPerson != null) {
 			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
 			mNameText.setText(mPerson.name);
@@ -81,6 +87,12 @@ public class PersonFragment extends Fragment {
 	public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_person, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Util.KEY_PHOTO, mOutStateBitmap);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -190,7 +202,7 @@ public class PersonFragment extends Fragment {
 		bmOptions.inSampleSize = scaleFactor;
 
 		mBitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri), null, bmOptions);
-
+		mOutStateBitmap = Util.bitmapToByteString(mBitmap);
 		mPhotoImage.setImageBitmap(mBitmap);
 	}
 }
