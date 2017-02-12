@@ -1,11 +1,14 @@
 package com.xi_zz.randomnamepicker;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +39,7 @@ import static com.xi_zz.randomnamepicker.Util.sPeople;
 
 public class PersonFragment extends Fragment {
 	private static final int REQUEST_PICK_PHOTO = 1;
+	private static final int REQUEST_READ_EXTERNAL = 11;
 	@BindView(R2.id.name_text)
 	EditText mNameText;
 	@BindView(R2.id.photo_image)
@@ -43,7 +47,7 @@ public class PersonFragment extends Fragment {
 
 	private Bitmap mBitmap;
 	private Person mPerson;
-	private String mOutStateBitmap;
+	private Uri mPicUri;
 
 
 	@Override
@@ -55,7 +59,7 @@ public class PersonFragment extends Fragment {
 		if (getArguments() != null)
 			mPerson = (Person) getArguments().getSerializable(Util.KEY_PERSON);
 		if (savedInstanceState != null)
-			mOutStateBitmap = (String) savedInstanceState.getSerializable(KEY_PHOTO);
+			mBitmap = savedInstanceState.getParcelable(KEY_PHOTO);
 	}
 
 	@Override
@@ -67,8 +71,8 @@ public class PersonFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-		if (mOutStateBitmap != null)
-			mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mOutStateBitmap));
+		if (mBitmap != null)
+			mPhotoImage.setImageBitmap(mBitmap);
 
 		if (mPerson != null) {
 			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
@@ -91,7 +95,7 @@ public class PersonFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable(Util.KEY_PHOTO, mOutStateBitmap);
+		outState.putParcelable(Util.KEY_PHOTO, mBitmap);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -119,6 +123,51 @@ public class PersonFragment extends Fragment {
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != RESULT_OK)
+			return;
+
+		if (requestCode == REQUEST_PICK_PHOTO) {
+			Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
+			mPicUri = data.getData();
+			if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+				requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+						REQUEST_READ_EXTERNAL);
+			else
+				requestCrop();
+		} else if (requestCode == UCrop.REQUEST_CROP) {
+			try {
+				decodeUri(UCrop.getOutput(data));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions,
+	                                       @NonNull final int[] grantResults) {
+		if (requestCode == REQUEST_READ_EXTERNAL) {
+			if (grantResults.length > 0
+					&& permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)
+					&& grantResults[0] == PackageManager.PERMISSION_GRANTED)
+				requestCrop();
+			else
+				Toast.makeText(getContext(),
+						"You must enable read external permission before picking a photo.",
+						Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@OnClick(R.id.pick_image_button)
+	public void pickImage() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(intent, REQUEST_PICK_PHOTO);
 	}
 
 	private void deletePerson() {
@@ -149,35 +198,9 @@ public class PersonFragment extends Fragment {
 		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 	}
 
-
-	@OnClick(R.id.pick_image_button)
-	public void pickImage() {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(intent, REQUEST_PICK_PHOTO);
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != RESULT_OK)
-			return;
-
-		if (requestCode == REQUEST_PICK_PHOTO) {
-			Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
-			requestCrop(data.getData());
-		} else if (requestCode == UCrop.REQUEST_CROP) {
-			try {
-				decodeUri(UCrop.getOutput(data));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void requestCrop(Uri picUri) {
+	private void requestCrop() {
 		String filename = "temp.png";
-		UCrop uCrop = UCrop.of(picUri, Uri.fromFile(new File(getContext().getCacheDir(), filename)));
+		UCrop uCrop = UCrop.of(mPicUri, Uri.fromFile(new File(getContext().getCacheDir(), filename)));
 		uCrop.start(getActivity(), this);
 	}
 
@@ -202,7 +225,6 @@ public class PersonFragment extends Fragment {
 		bmOptions.inSampleSize = scaleFactor;
 
 		mBitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri), null, bmOptions);
-		mOutStateBitmap = Util.bitmapToByteString(mBitmap);
 		mPhotoImage.setImageBitmap(mBitmap);
 	}
 }

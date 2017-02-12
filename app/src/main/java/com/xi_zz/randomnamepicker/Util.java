@@ -13,8 +13,9 @@ public class Util {
 	public static final String KEY_PEOPLE_STR = "people_string";
 	public static final String KEY_PERSON = "person";
 	public static final String KEY_PERSONS = "persons";
-	public static final Gson GSON = new Gson();
 	public static final String KEY_PHOTO = "photo";
+
+	public static final Gson GSON = new Gson();
 
 	public static People sPeople = new People(new ArrayList<Person>());
 
