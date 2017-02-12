@@ -4,8 +4,8 @@
 	<android.support.v7.preference.SwitchPreferenceCompat
 		android:defaultValue="true"
 		android:key="@string/everyone_gets_called"
-		android:summary="Call each person exactly once randomly"
-		android:title="Everyone gets called"
+		android:summary="@string/setting_description"
+		android:title="@string/everyone_gets_called"
 		/>
 
 </android.support.v7.preference.PreferenceScreen>

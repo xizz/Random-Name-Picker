@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">抓壮丁</string>
+	<string name="settings">设置</string>
+	<string name="everyone_gets_called">一个都不放过</string>
+	<string name="next_name">再抓一个</string>
+	<string name="add_person">添加</string>
+	<string name="save">保存</string>
+	<string name="see_all">查看全部</string>
+	<string name="photo_pick">有图有真相</string>
+	<string name="name">名字</string>
+	<string name="delete">删除</string>
+	<string name="setting_description">随机抓壮丁，每个壮丁都会被抓到一次</string>
+</resources>
