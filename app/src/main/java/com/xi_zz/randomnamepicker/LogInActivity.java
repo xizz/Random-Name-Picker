@@ -1,5 +1,6 @@
 package com.xi_zz.randomnamepicker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class LogInActivity extends AppCompatActivity {
 						} else {
 							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + " logged in successful",
 									Toast.LENGTH_SHORT).show();
+							startActivity(new Intent(LogInActivity.this, SplashActivity.class));
 							finish();
 						}
 
@@ -62,6 +64,7 @@ public class LogInActivity extends AppCompatActivity {
 						} else {
 							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + " signed up successful",
 									Toast.LENGTH_SHORT).show();
+							startActivity(new Intent(LogInActivity.this, SplashActivity.class));
 							finish();
 						}
 
