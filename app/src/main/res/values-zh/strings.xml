@@ -11,4 +11,9 @@
 	<string name="name">名字</string>
 	<string name="delete">删除</string>
 	<string name="setting_description">随机抓壮丁，每个壮丁都会被抓到一次</string>
+	<string name="email">邮箱</string>
+	<string name="password">密码</string>
+	<string name="log_in">登入</string>
+	<string name="log_out">登出</string>
+	<string name="sign_up">注册</string>
 </resources>
