@@ -141,11 +141,9 @@ public class PersonFragment extends Fragment {
 			return;
 
 		if (requestCode == REQUEST_PICK_PHOTO) {
-			Toast.makeText(getContext(), "Picture Picked", Toast.LENGTH_SHORT).show();
 			mPicUri = data.getData();
-			if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
-				requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-						REQUEST_READ_EXTERNAL);
+			if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+				requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL);
 			else
 				requestCrop();
 		} else if (requestCode == UCrop.REQUEST_CROP) {
