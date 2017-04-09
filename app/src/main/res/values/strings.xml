@@ -11,4 +11,9 @@
 	<string name="name">Name</string>
 	<string name="delete">Delete</string>
 	<string name="setting_description">Call each person exactly once randomly</string>
+	<string name="email">Email</string>
+	<string name="password">Password</string>
+	<string name="log_in">Log In</string>
+	<string name="log_out">Log Out</string>
+	<string name="sign_up">Sign Up</string>
 </resources>
