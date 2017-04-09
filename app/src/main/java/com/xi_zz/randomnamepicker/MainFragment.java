@@ -17,6 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -37,6 +44,11 @@ public class MainFragment extends Fragment {
 	private Person mCurrentPerson;
 	private int mSize;
 
+	private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+	private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + "/people");
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,6 +61,31 @@ public class MainFragment extends Fragment {
 			mCopy = (ArrayList<Person>) savedInstanceState.getSerializable(Util.KEY_PERSONS);
 		} else
 			mCopy = new ArrayList<>(sPeople.peopleList);
+
+		mPeopleRef.addChildEventListener(new ChildEventListener() {
+			@Override
+			public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
+				Util.sPeople.add(dataSnapshot.getValue(Person.class));
+			}
+
+			@Override
+			public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
+				Util.sPeople.update(dataSnapshot.getValue(Person.class));
+			}
+
+			@Override
+			public void onChildRemoved(final DataSnapshot dataSnapshot) {
+				Util.sPeople.remove(dataSnapshot.getValue(Person.class));
+			}
+
+			@Override
+			public void onChildMoved(final DataSnapshot dataSnapshot, final String s) { }
+
+			@Override
+			public void onCancelled(final DatabaseError databaseError) {
+
+			}
+		});
 	}
 
 	@Override
@@ -73,7 +110,6 @@ public class MainFragment extends Fragment {
 		String peopleString = mPreferences.getString(Util.KEY_PEOPLE_STR, null);
 		if (TextUtils.isEmpty(peopleString))
 			return;
-		sPeople = Util.GSON.fromJson(peopleString, People.class);
 		if (mSize != sPeople.size()) {
 			mCopy = new ArrayList<>(sPeople.peopleList);
 			mSize = sPeople.size();
@@ -112,6 +148,10 @@ public class MainFragment extends Fragment {
 						.replace(R.id.container, new PeopleListFragment())
 						.commit();
 				return true;
+			case R.id.sign_out:
+				mNameView.setText(R.string.name);
+				mImageView.setImageResource(R.drawable.ic_profile);
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -139,12 +179,9 @@ public class MainFragment extends Fragment {
 
 	private void setDisplay(Person person) {
 		mNameView.setText(person.name);
-		if (person.image != 0) {
-			mImageView.setImageResource(person.image);
-		} else if (person.photo != null) {
+		if (person.photo != null)
 			mImageView.setImageBitmap(Util.byteStringToBitmap(person.photo));
-		} else {
+		else
 			mImageView.setImageResource(R.drawable.ic_profile);
-		}
 	}
 }

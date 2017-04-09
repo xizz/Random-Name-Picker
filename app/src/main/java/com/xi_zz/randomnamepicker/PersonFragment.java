@@ -32,6 +32,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,7 +86,8 @@ public class PersonFragment extends Fragment {
 		if (mPerson != null) {
 			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
 			mNameText.setText(mPerson.name);
-			mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mPerson.photo));
+			if (mPerson.photo != null)
+				mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mPerson.photo));
 		}
 	}
 
@@ -179,7 +181,8 @@ public class PersonFragment extends Fragment {
 	}
 
 	private void deletePerson() {
-		sPeople.peopleList.remove(mPerson);
+		sPeople.remove(mPerson);
+		mPeopleRef.child(mPerson.id).removeValue();
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		String peopleString = Util.GSON.toJson(sPeople);
 		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
@@ -191,20 +194,21 @@ public class PersonFragment extends Fragment {
 		temp.name = mNameText.getText().toString();
 		temp.photo = mBitmap == null ? temp.photo : Util.bitmapToByteString(mBitmap);
 
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String peopleString = Util.GSON.toJson(sPeople);
-		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
+		mPeopleRef.child(mPerson.id).setValue(temp);
+//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//		String peopleString = Util.GSON.toJson(sPeople);
+//		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 	}
 
 	private void addPerson() {
 		String name = mNameText.getText().toString();
 		String imageStr = mBitmap == null ? null : Util.bitmapToByteString(mBitmap);
-		Person person = new Person(name, imageStr);
-		mPeopleRef.push().setValue(person);
-		sPeople.add(person);
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String peopleString = Util.GSON.toJson(sPeople);
-		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
+		Person person = new Person(UUID.randomUUID().toString(), name, imageStr);
+		mPeopleRef.child(person.id).setValue(person);
+//		sPeople.add(person);
+//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+//		String peopleString = Util.GSON.toJson(sPeople);
+//		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 	}
 
 	private void requestCrop() {

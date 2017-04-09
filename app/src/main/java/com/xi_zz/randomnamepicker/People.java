@@ -19,7 +19,6 @@ public class People {
 		return peopleList.get(i);
 	}
 
-
 	public int size() {
 		return peopleList.size();
 	}
@@ -28,7 +27,23 @@ public class People {
 		peopleList.add(person);
 	}
 
-	public Person get(final Person person) {
+	public void remove(final Person person) {
+		peopleList.remove(person);
+	}
+
+	public void clear() {
+		peopleList.clear();
+	}
+
+	public Person get(@NonNull final Person person) {
 		return peopleList.get(peopleList.indexOf(person));
+	}
+
+	public void update(@NonNull final Person person) {
+		Person local = get(person);
+		if (local != null) {
+			local.name = person.name;
+			local.photo = person.photo;
+		}
 	}
 }
