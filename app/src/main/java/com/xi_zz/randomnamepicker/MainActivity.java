@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 			case R.id.sign_out:
 				mAuth.signOut();
 				Util.sPeople.clear();
+				PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
 				startActivity(new Intent(this, SplashActivity.class));
 				return true;
 			default:

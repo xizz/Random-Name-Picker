@@ -55,7 +55,7 @@ public class MainFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
-
+		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		if (savedInstanceState != null) {
 			mCurrentPerson = (Person) savedInstanceState.getSerializable(Util.KEY_PERSON);
