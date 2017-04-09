@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -200,7 +201,15 @@ public class PersonFragment extends Fragment {
 
 	private void requestCrop() {
 		String filename = "temp.png";
+
+		UCrop.Options options = new UCrop.Options();
+		options.setActiveWidgetColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+		options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
+
 		UCrop uCrop = UCrop.of(mPicUri, Uri.fromFile(new File(getContext().getCacheDir(), filename)));
+		uCrop.withOptions(options);
+		uCrop.withAspectRatio(1, 1);
 		uCrop.start(getActivity(), this);
 	}
 
