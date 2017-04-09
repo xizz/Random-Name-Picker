@@ -12,10 +12,24 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    productFlavors {
+        stage {
+            applicationId "com.xi_zz.randomnamepicker.stage"
+        }
+        prod {
+            applicationId "com.xi_zz.randomnamepicker"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            applicationIdSuffix ".debug"
         }
     }
 }
