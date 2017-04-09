@@ -28,11 +28,12 @@ public class MainActivity extends AppCompatActivity {
 				FirebaseUser user = firebaseAuth.getCurrentUser();
 				if (user == null)
 					startActivity(new Intent(MainActivity.this, LogInActivity.class));
+				else {
+					if (savedInstanceState == null)
+						getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFragment()).commit();
+				}
 			}
 		};
-
-		if (savedInstanceState == null)
-			getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFragment()).commit();
 	}
 
 	@Override

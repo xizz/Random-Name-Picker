@@ -25,6 +25,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -49,6 +52,10 @@ public class PersonFragment extends Fragment {
 	private Bitmap mBitmap;
 	private Person mPerson;
 	private Uri mPicUri;
+
+	private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+	private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + "/people");
 
 
 	@Override
@@ -193,6 +200,7 @@ public class PersonFragment extends Fragment {
 		String name = mNameText.getText().toString();
 		String imageStr = mBitmap == null ? null : Util.bitmapToByteString(mBitmap);
 		Person person = new Person(name, imageStr);
+		mPeopleRef.push().setValue(person);
 		sPeople.add(person);
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		String peopleString = Util.GSON.toJson(sPeople);
