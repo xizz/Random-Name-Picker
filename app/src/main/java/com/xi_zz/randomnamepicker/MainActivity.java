@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
 				FirebaseUser user = firebaseAuth.getCurrentUser();
 				if (user == null)
 					startActivity(new Intent(MainActivity.this, LogInActivity.class));
+				else {
+					Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+					if (fragment == null)
+						getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFragment()).commit();
+				}
 			}
 		};
-
-		if (savedInstanceState == null)
-			getSupportFragmentManager().beginTransaction().replace(R.id.container, new MainFragment()).commit();
 	}
 
 	@Override
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			case R.id.sign_out:
 				auth.signOut();
+				Util.sPeople.clear();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
