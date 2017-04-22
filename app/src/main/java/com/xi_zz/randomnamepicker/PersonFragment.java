@@ -2,7 +2,6 @@ package com.xi_zz.randomnamepicker;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -180,11 +178,7 @@ public class PersonFragment extends Fragment {
 
 	private void deletePerson() {
 		sPeople.remove(mPerson);
-		mPeopleRef.child(mPerson.id).removeValue();
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		String peopleString = Util.GSON.toJson(sPeople);
-		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
-
+		mPeopleRef.setValue(sPeople);
 	}
 
 	private void editPerson() {
@@ -192,7 +186,7 @@ public class PersonFragment extends Fragment {
 		temp.name = mNameText.getText().toString();
 		temp.photo = mBitmap == null ? temp.photo : Util.bitmapToByteString(mBitmap);
 
-		mPeopleRef.child(mPerson.id).setValue(temp);
+		mPeopleRef.setValue(sPeople);
 //		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 //		String peopleString = Util.GSON.toJson(sPeople);
 //		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
@@ -202,7 +196,8 @@ public class PersonFragment extends Fragment {
 		String name = mNameText.getText().toString();
 		String imageStr = mBitmap == null ? null : Util.bitmapToByteString(mBitmap);
 		Person person = new Person(UUID.randomUUID().toString(), name, imageStr);
-		mPeopleRef.child(person.id).setValue(person);
+		sPeople.add(person);
+		mPeopleRef.setValue(sPeople);
 //		sPeople.add(person);
 //		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 //		String peopleString = Util.GSON.toJson(sPeople);

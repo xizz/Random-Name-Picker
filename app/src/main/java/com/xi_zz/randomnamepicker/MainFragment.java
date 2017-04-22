@@ -19,11 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -63,30 +63,47 @@ public class MainFragment extends Fragment {
 		} else
 			mCopy = new ArrayList<>(sPeople.peopleList);
 
-		mPeopleRef.addChildEventListener(new ChildEventListener() {
-			@Override
-			public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-				Util.sPeople.add(dataSnapshot.getValue(Person.class));
-			}
+		sPeople = new People();
 
+		mPeopleRef.addValueEventListener(new ValueEventListener() {
 			@Override
-			public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-				Util.sPeople.update(dataSnapshot.getValue(Person.class));
+			public void onDataChange(final DataSnapshot dataSnapshot) {
+				if (dataSnapshot.getValue(People.class) != null)
+					Util.sPeople = dataSnapshot.getValue(People.class);
 			}
-
-			@Override
-			public void onChildRemoved(final DataSnapshot dataSnapshot) {
-				Util.sPeople.remove(dataSnapshot.getValue(Person.class));
-			}
-
-			@Override
-			public void onChildMoved(final DataSnapshot dataSnapshot, final String s) { }
 
 			@Override
 			public void onCancelled(final DatabaseError databaseError) {
 
 			}
 		});
+
+
+//		mPeopleRef.addChildEventListener(new ChildEventListener() {
+//			@Override
+//			public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
+//				sPeople.add(dataSnapshot.getValue(Person.class));
+//			}
+//
+//
+//			@Override
+//			public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
+//				Util.sPeople.update(dataSnapshot.getValue(Person.class));
+//			}
+//
+//			@Override
+//			public void onChildRemoved(final DataSnapshot dataSnapshot) {
+//				Util.sPeople.remove(dataSnapshot.getValue(Person.class));
+//			}
+//
+//			@Override
+//			public void onChildMoved(final DataSnapshot dataSnapshot, final String s) { }
+//
+//			@Override
+//			public void onCancelled(final DatabaseError databaseError) {
+//
+//			}
+//		});
 	}
 
 	@Override
