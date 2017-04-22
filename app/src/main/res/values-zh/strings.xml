@@ -7,6 +7,7 @@
 	<string name="add_person">添加</string>
 	<string name="save">保存</string>
 	<string name="see_all">查看全部</string>
+	<string name="all_people">全部壮丁</string>
 	<string name="photo_pick">有图有真相</string>
 	<string name="name">名字</string>
 	<string name="delete">删除</string>
@@ -16,4 +17,10 @@
 	<string name="log_in">登入</string>
 	<string name="log_out">登出</string>
 	<string name="sign_up">注册</string>
+	<string name="no_person">没有添加的壮丁</string>
+	<string name="login_sucess">登入成功</string>
+	<string name="signup_sucess">注册成功</string>
+	<string name="edit_profile">修改信息</string>
+	<string name="must_enter_name">请输入名称</string>
+	<string name="enable_permission">请允许查看照片库</string>
 </resources>

@@ -77,33 +77,6 @@ public class MainFragment extends Fragment {
 
 			}
 		});
-
-
-//		mPeopleRef.addChildEventListener(new ChildEventListener() {
-//			@Override
-//			public void onChildAdded(final DataSnapshot dataSnapshot, final String s) {
-//				sPeople.add(dataSnapshot.getValue(Person.class));
-//			}
-//
-//
-//			@Override
-//			public void onChildChanged(final DataSnapshot dataSnapshot, final String s) {
-//				Util.sPeople.update(dataSnapshot.getValue(Person.class));
-//			}
-//
-//			@Override
-//			public void onChildRemoved(final DataSnapshot dataSnapshot) {
-//				Util.sPeople.remove(dataSnapshot.getValue(Person.class));
-//			}
-//
-//			@Override
-//			public void onChildMoved(final DataSnapshot dataSnapshot, final String s) { }
-//
-//			@Override
-//			public void onCancelled(final DatabaseError databaseError) {
-//
-//			}
-//		});
 	}
 
 	@Override
@@ -185,7 +158,7 @@ public class MainFragment extends Fragment {
 	@OnClick(R2.id.next_name_button)
 	public void displayRandomName() {
 		if (sPeople.size() == 0) {
-			Toast.makeText(getContext(), "You don't have anyone on file.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), R.string.no_person, Toast.LENGTH_SHORT).show();
 			return;
 		}
 

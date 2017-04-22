@@ -26,7 +26,7 @@ public class PeopleListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("All People");
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_people);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class PeopleListFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("All People");
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_people);
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class PersonFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Add a Person");
+		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.add_person);
 		if (getArguments() != null)
 			mPerson = (Person) getArguments().getSerializable(Util.KEY_PERSON);
 		if (savedInstanceState != null)
@@ -82,7 +82,7 @@ public class PersonFragment extends Fragment {
 			mPhotoImage.setImageBitmap(mBitmap);
 
 		if (mPerson != null) {
-			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Profile");
+			((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_profile);
 			mNameText.setText(mPerson.name);
 			if (mPerson.photo != null)
 				mPhotoImage.setImageBitmap(Util.byteStringToBitmap(mPerson.photo));
@@ -115,7 +115,7 @@ public class PersonFragment extends Fragment {
 				return true;
 			case R.id.save:
 				if (TextUtils.isEmpty(mNameText.getText())) {
-					Toast.makeText(getContext(), "You must enter a name.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), R.string.must_enter_name, Toast.LENGTH_SHORT).show();
 				} else {
 					if (mPerson != null)
 						editPerson();
@@ -163,7 +163,7 @@ public class PersonFragment extends Fragment {
 				requestCrop();
 			else
 				Toast.makeText(getContext(),
-						"You must enable read external permission before picking a photo.",
+						R.string.enable_permission,
 						Toast.LENGTH_SHORT).show();
 		}
 	}

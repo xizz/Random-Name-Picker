@@ -41,7 +41,7 @@ public class LogInActivity extends AppCompatActivity {
 						if (!task.isSuccessful()) {
 							Toast.makeText(LogInActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + " logged in successful",
+							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + R.string.login_sucess,
 									Toast.LENGTH_SHORT).show();
 							startActivity(new Intent(LogInActivity.this, SplashActivity.class));
 							finish();
@@ -62,7 +62,7 @@ public class LogInActivity extends AppCompatActivity {
 						if (!task.isSuccessful()) {
 							Toast.makeText(LogInActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + " signed up successful",
+							Toast.makeText(LogInActivity.this, task.getResult().getUser().getEmail() + R.string.signup_sucess,
 									Toast.LENGTH_SHORT).show();
 							startActivity(new Intent(LogInActivity.this, SplashActivity.class));
 							finish();

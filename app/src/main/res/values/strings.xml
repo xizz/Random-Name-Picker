@@ -7,6 +7,7 @@
 	<string name="add_person">Add Person</string>
 	<string name="save">Save</string>
 	<string name="see_all">See All</string>
+	<string name="all_people">All People</string>
 	<string name="photo_pick">Pick a Photo</string>
 	<string name="name">Name</string>
 	<string name="delete">Delete</string>
@@ -16,4 +17,10 @@
 	<string name="log_in">Log In</string>
 	<string name="log_out">Log Out</string>
 	<string name="sign_up">Sign Up</string>
+	<string name="no_person">You do not have anyone on file.</string>
+	<string name="login_sucess">Successfully Logged In</string>
+	<string name="signup_sucess">Successful Signed Up</string>
+	<string name="edit_profile">Edit Profile</string>
+	<string name="must_enter_name">You must enter your name</string>
+	<string name="enable_permission">You must enable read external permission before picking a photo.</string>
 </resources>
