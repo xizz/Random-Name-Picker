@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.model;
 
 import java.io.Serializable;
 

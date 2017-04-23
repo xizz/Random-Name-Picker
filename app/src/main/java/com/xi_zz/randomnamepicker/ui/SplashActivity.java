@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.xi_zz.randomnamepicker.R;
 
 public class SplashActivity extends AppCompatActivity {
 

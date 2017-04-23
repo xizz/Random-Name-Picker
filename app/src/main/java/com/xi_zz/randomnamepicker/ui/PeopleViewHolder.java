@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +11,11 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.R2;
+import com.xi_zz.randomnamepicker.model.Person;
+import com.xi_zz.randomnamepicker.tool.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

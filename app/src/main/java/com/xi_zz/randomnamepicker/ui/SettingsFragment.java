@@ -1,10 +1,12 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.MenuItem;
+
+import com.xi_zz.randomnamepicker.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 	@Override

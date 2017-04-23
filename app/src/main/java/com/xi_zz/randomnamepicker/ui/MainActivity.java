@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.tool.Util;
 
 public class MainActivity extends AppCompatActivity {
 

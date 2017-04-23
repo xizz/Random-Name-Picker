@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.tool;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +7,8 @@ import android.util.Base64;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.xi_zz.randomnamepicker.model.People;
+import com.xi_zz.randomnamepicker.model.Person;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

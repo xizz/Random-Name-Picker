@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.xi_zz.randomnamepicker.LogInActivity"
+              tools:context="com.xi_zz.randomnamepicker.ui.LogInActivity"
 	>
 
 	<EditText

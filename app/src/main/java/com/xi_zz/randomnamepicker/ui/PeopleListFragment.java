@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.R2;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

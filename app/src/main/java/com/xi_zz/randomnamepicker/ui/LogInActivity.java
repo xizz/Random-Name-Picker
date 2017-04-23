@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.xi_zz.randomnamepicker.R;
 
 public class LogInActivity extends AppCompatActivity {
 	private EditText mEmailEditText;

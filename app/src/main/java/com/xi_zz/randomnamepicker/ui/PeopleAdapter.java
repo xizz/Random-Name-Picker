@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import static com.xi_zz.randomnamepicker.Util.sPeople;
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.model.Person;
+
+import static com.xi_zz.randomnamepicker.tool.Util.sPeople;
 
 
 public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {

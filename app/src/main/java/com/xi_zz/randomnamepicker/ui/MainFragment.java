@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,6 +20,11 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.R2;
+import com.xi_zz.randomnamepicker.model.People;
+import com.xi_zz.randomnamepicker.model.Person;
+import com.xi_zz.randomnamepicker.tool.Util;
 
 import java.util.ArrayList;
 
@@ -27,8 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.xi_zz.randomnamepicker.Util.sPeople;
-import static com.xi_zz.randomnamepicker.Util.sValueEventListener;
+import static com.xi_zz.randomnamepicker.tool.Util.sPeople;
+import static com.xi_zz.randomnamepicker.tool.Util.sValueEventListener;
 
 public class MainFragment extends Fragment {
 

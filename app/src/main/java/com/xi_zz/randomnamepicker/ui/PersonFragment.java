@@ -1,4 +1,4 @@
-package com.xi_zz.randomnamepicker;
+package com.xi_zz.randomnamepicker.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -26,6 +26,10 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.xi_zz.randomnamepicker.R;
+import com.xi_zz.randomnamepicker.R2;
+import com.xi_zz.randomnamepicker.model.Person;
+import com.xi_zz.randomnamepicker.tool.Util;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -37,8 +41,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static com.xi_zz.randomnamepicker.Util.KEY_PHOTO;
-import static com.xi_zz.randomnamepicker.Util.sPeople;
+import static com.xi_zz.randomnamepicker.tool.Util.KEY_PHOTO;
+import static com.xi_zz.randomnamepicker.tool.Util.sPeople;
 
 public class PersonFragment extends Fragment {
 	private static final int REQUEST_PICK_PHOTO = 1;
