@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.xi_zz.randomnamepicker.tool.Util.DEFAULT_REF;
 import static com.xi_zz.randomnamepicker.tool.Util.KEY_PHOTO;
 import static com.xi_zz.randomnamepicker.tool.Util.sPeople;
 
@@ -58,7 +59,7 @@ public class PersonFragment extends Fragment {
 
 	private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 	private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + "/people");
+	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + DEFAULT_REF);
 
 
 	@Override

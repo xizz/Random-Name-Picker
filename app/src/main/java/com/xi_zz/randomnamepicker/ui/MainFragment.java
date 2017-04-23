@@ -32,6 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.xi_zz.randomnamepicker.tool.Util.DEFAULT_REF;
 import static com.xi_zz.randomnamepicker.tool.Util.sPeople;
 import static com.xi_zz.randomnamepicker.tool.Util.sValueEventListener;
 
@@ -49,7 +50,7 @@ public class MainFragment extends Fragment {
 
 	private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
 	private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + "/people");
+	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + DEFAULT_REF);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

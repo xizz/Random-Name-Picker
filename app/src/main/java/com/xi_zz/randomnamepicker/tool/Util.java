@@ -14,7 +14,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class Util {
-	public static final String KEY_PEOPLE_STR = "people_string";
+	public static final String DEFAULT_REF = "/group/people";
+
 	public static final String KEY_PERSON = "person";
 	public static final String KEY_PERSONS = "persons";
 	public static final String KEY_PHOTO = "photo";
