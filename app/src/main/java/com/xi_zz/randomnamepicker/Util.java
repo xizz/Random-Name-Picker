@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.google.gson.Gson;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
@@ -14,8 +12,6 @@ public class Util {
 	public static final String KEY_PERSON = "person";
 	public static final String KEY_PERSONS = "persons";
 	public static final String KEY_PHOTO = "photo";
-
-	public static final Gson GSON = new Gson();
 
 	public static People sPeople = new People(new ArrayList<Person>());
 

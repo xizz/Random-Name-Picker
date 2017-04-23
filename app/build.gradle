@@ -52,9 +52,6 @@ dependencies {
     compile "com.google.firebase:firebase-database:$googlePlayServicesVersion"
     compile "com.google.firebase:firebase-auth:$googlePlayServicesVersion"
 
-
-
-    compile 'com.google.code.gson:gson:2.7'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'com.yalantis:ucrop:2.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

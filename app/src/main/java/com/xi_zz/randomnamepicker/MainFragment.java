@@ -60,10 +60,10 @@ public class MainFragment extends Fragment {
 		if (savedInstanceState != null) {
 			mCurrentPerson = (Person) savedInstanceState.getSerializable(Util.KEY_PERSON);
 			mCopy = (ArrayList<Person>) savedInstanceState.getSerializable(Util.KEY_PERSONS);
-		} else
+		} else {
 			mCopy = new ArrayList<>(sPeople.peopleList);
-
-		sPeople = new People();
+			sPeople = new People();
+		}
 
 		mPeopleRef.addValueEventListener(new ValueEventListener() {
 			@Override

@@ -187,9 +187,6 @@ public class PersonFragment extends Fragment {
 		temp.photo = mBitmap == null ? temp.photo : Util.bitmapToByteString(mBitmap);
 
 		mPeopleRef.setValue(sPeople);
-//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//		String peopleString = Util.GSON.toJson(sPeople);
-//		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 	}
 
 	private void addPerson() {
@@ -198,10 +195,6 @@ public class PersonFragment extends Fragment {
 		Person person = new Person(UUID.randomUUID().toString(), name, imageStr);
 		sPeople.add(person);
 		mPeopleRef.setValue(sPeople);
-//		sPeople.add(person);
-//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//		String peopleString = Util.GSON.toJson(sPeople);
-//		preferences.edit().putString(Util.KEY_PEOPLE_STR, peopleString).apply();
 	}
 
 	private void requestCrop() {
