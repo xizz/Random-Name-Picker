@@ -19,11 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -32,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.xi_zz.randomnamepicker.Util.sPeople;
+import static com.xi_zz.randomnamepicker.Util.sValueEventListener;
 
 public class MainFragment extends Fragment {
 
@@ -49,7 +47,6 @@ public class MainFragment extends Fragment {
 	private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 	private DatabaseReference mPeopleRef = mDatabase.getReference(mAuth.getCurrentUser().getUid() + "/people");
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,19 +61,13 @@ public class MainFragment extends Fragment {
 			mCopy = new ArrayList<>(sPeople.peopleList);
 			sPeople = new People();
 		}
+		mPeopleRef.addValueEventListener(sValueEventListener);
+	}
 
-		mPeopleRef.addValueEventListener(new ValueEventListener() {
-			@Override
-			public void onDataChange(final DataSnapshot dataSnapshot) {
-				if (dataSnapshot.getValue(People.class) != null)
-					Util.sPeople = dataSnapshot.getValue(People.class);
-			}
-
-			@Override
-			public void onCancelled(final DatabaseError databaseError) {
-
-			}
-		});
+	@Override
+	public void onDestroy() {
+		mPeopleRef.removeEventListener(sValueEventListener);
+		super.onDestroy();
 	}
 
 	@Override

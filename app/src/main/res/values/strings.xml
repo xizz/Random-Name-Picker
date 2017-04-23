@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name">Random Name Picker</string>
 	<string name="settings">Settings</string>
-	<string name="everyone_gets_called">everyone_gets_called</string>
+	<string name="everyone_gets_called">Everyone gets called</string>
 	<string name="next_name">Next</string>
 	<string name="add_person">Add Person</string>
 	<string name="save">Save</string>
