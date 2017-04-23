@@ -15,6 +15,7 @@
 		>
 		<activity
 			android:name=".SplashActivity"
+			android:screenOrientation="portrait"
 			android:theme="@style/SplashTheme"
 			>
 			<intent-filter>
@@ -22,8 +23,14 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name=".MainActivity"/>
-		<activity android:name=".LogInActivity"/>
+		<activity
+			android:name=".MainActivity"
+			android:screenOrientation="portrait"
+			/>
+		<activity
+			android:name=".LogInActivity"
+			android:screenOrientation="portrait"
+			/>
 		<activity
 			android:name="com.yalantis.ucrop.UCropActivity"
 			android:screenOrientation="portrait"
