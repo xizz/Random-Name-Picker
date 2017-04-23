@@ -185,7 +185,6 @@ public class PersonFragment extends Fragment {
 		Person temp = sPeople.get(mPerson);
 		temp.name = mNameText.getText().toString();
 		temp.photo = mBitmap == null ? temp.photo : Util.bitmapToByteString(mBitmap);
-
 		mPeopleRef.setValue(sPeople);
 	}
 

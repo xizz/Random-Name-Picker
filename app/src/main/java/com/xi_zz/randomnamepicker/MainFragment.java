@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,8 +50,6 @@ public class MainFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 		if (savedInstanceState != null) {
 			mCurrentPerson = (Person) savedInstanceState.getSerializable(Util.KEY_PERSON);
@@ -96,9 +93,7 @@ public class MainFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
-		String peopleString = mPreferences.getString(Util.KEY_PEOPLE_STR, null);
-		if (TextUtils.isEmpty(peopleString))
-			return;
+		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 		if (mSize != sPeople.size()) {
 			mCopy = new ArrayList<>(sPeople.peopleList);
 			mSize = sPeople.size();

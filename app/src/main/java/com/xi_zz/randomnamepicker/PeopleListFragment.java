@@ -25,15 +25,12 @@ public class PeopleListFragment extends Fragment {
 	public void onCreate(@Nullable final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_people);
 	}
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_people_list, container, false);
 		ButterKnife.bind(this, view);
-
 		return view;
 	}
 
@@ -48,7 +45,9 @@ public class PeopleListFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.all_people);
+		mPeopleAdapter.notifyDataSetChanged();
 	}
 
 	@Override
